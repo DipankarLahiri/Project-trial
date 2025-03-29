@@ -1,0 +1,51 @@
+Participant ID,AI Use (Frequency),AI Use (Purpose),Academic Performance (Grade),Parental Income (Range),Social Interaction Skills (Score),Social Media Exposure (Hours/day),Field of Study
+1,Often,Entertainment,D,"< ¥3,000",2,1,Other
+2,Always,Entertainment,A,"< ¥3,000",3,4,Other
+3,Sometimes,Entertainment,D,"< ¥3,000",1,4,STEM
+4,Always,Everyday Problem-Solving,B,"< ¥3,000",1,3,Other
+5,Always,Chatting,A,"¥5,001 - ¥8,000",4,1,Humanities
+6,Rarely,Learning,F,"< ¥3,000",3,3,Economics/Business
+7,Sometimes,Entertainment,C,"¥8,001 - ¥12,000",5,1,STEM
+8,Sometimes,Work,D,"> ¥12,000",3,5,Economics/Business
+9,Sometimes,Entertainment,C,"< ¥3,000",4,2,Other
+10,Always,Work,C,"¥5,001 - ¥8,000",4,2,Other
+11,Often,Work,A,"¥5,001 - ¥8,000",3,2,STEM
+12,Sometimes,Entertainment,C,"< ¥3,000",4,3,Humanities
+13,Always,Everyday Problem-Solving,F,"> ¥12,000",3,5,Social Sciences
+14,Rarely,Work,C,"< ¥3,000",2,1,STEM
+15,Often,Work,A,"¥5,001 - ¥8,000",3,4,Social Sciences
+16,Rarely,Entertainment,F,"¥3,000 - ¥5,000",3,1,Social Sciences
+17,Often,Work,B,"¥8,001 - ¥12,000",4,4,Humanities
+18,Always,Work,C,"¥5,001 - ¥8,000",4,1,Social Sciences
+19,Never,Entertainment,A,"< ¥3,000",1,5,Social Sciences
+20,Often,Entertainment,B,"¥8,001 - ¥12,000",1,4,Humanities
+21,Rarely,Learning,B,"< ¥3,000",2,3,Social Sciences
+22,Always,Everyday Problem-Solving,D,"< ¥3,000",1,1,Social Sciences
+23,Often,Everyday Problem-Solving,F,"¥3,000 - ¥5,000",3,1,Social Sciences
+24,Never,Work,C,"¥8,001 - ¥12,000",4,4,STEM
+25,Never,Everyday Problem-Solving,A,"¥8,001 - ¥12,000",1,3,STEM
+26,Sometimes,Work,D,"¥3,000 - ¥5,000",1,3,STEM
+27,Sometimes,Learning,F,"¥5,001 - ¥8,000",2,5,Humanities
+28,Rarely,Entertainment,D,"< ¥3,000",2,3,Other
+29,Often,Entertainment,F,"> ¥12,000",3,3,Social Sciences
+30,Often,Entertainment,F,"< ¥3,000",4,3,Social Sciences
+31,Sometimes,Everyday Problem-Solving,C,"< ¥3,000",2,2,Humanities
+32,Often,Learning,F,"¥5,001 - ¥8,000",1,5,Social Sciences
+33,Often,Everyday Problem-Solving,D,"< ¥3,000",4,1,STEM
+34,Never,Everyday Problem-Solving,F,"¥3,000 - ¥5,000",4,4,Other
+35,Sometimes,Learning,C,"¥3,000 - ¥5,000",1,1,Economics/Business
+36,Always,Learning,C,"¥8,001 - ¥12,000",2,5,Social Sciences
+37,Sometimes,Learning,D,"> ¥12,000",1,4,STEM
+38,Always,Learning,B,"< ¥3,000",4,5,Economics/Business
+39,Never,Entertainment,B,"< ¥3,000",5,3,Other
+40,Rarely,Chatting,F,"¥5,001 - ¥8,000",5,4,Economics/Business
+41,Often,Chatting,A,"¥3,000 - ¥5,000",3,3,STEM
+42,Never,Learning,F,"> ¥12,000",1,1,Economics/Business
+43,Often,Chatting,D,"¥8,001 - ¥12,000",1,1,Humanities
+44,Rarely,Chatting,D,"¥3,000 - ¥5,000",3,4,Economics/Business
+45,Rarely,Learning,D,"¥8,001 - ¥12,000",3,4,Social Sciences
+46,Never,Chatting,D,"¥5,001 - ¥8,000",3,5,Social Sciences
+47,Rarely,Everyday Problem-Solving,D,"¥5,001 - ¥8,000",4,5,Humanities
+48,Always,Work,C,"< ¥3,000",1,3,STEM
+49,Rarely,Work,B,"> ¥12,000",4,4,Social Sciences
+50,Often,Learning,D,"¥8,001 - ¥12,000",3,1,Other

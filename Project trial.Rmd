@@ -1,0 +1,34 @@
+---
+title: "Project trial"
+author: "Dipankar Lahiri"
+date: "2025-03-29"
+output: html_document
+---
+
+This is a trial run of an upcoming data analysis project. Made-up data is being used.
+**Research Question**: Do people who use AI more come from higher parental income families, have lower academic scores, worse social skills, and use digital social media platforms more?
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+# Research Design
+Survey, Questionnaire.  
+Population: Young Chinese people (18-25)  
+Sample Size: Approximately 50 (convenience or self-selecting)
+
+# Variables
+- **Dependent variable**: AI use (frequency of use)  
+- **Independent variables**:
+  1. Academic performance (self-reported grades)  
+  2. Parental income (categorical income ranges)  
+  3. Social interaction skills (composite score from multiple Likert scale questions)  
+  4. Social media exposure (frequency or duration of social media use)
+
+# Hypotheses
+- **H1**: Lower academic performance is associated with higher AI use.  
+- **H2**: Higher parental income is associated with higher AI use.  
+- **H3**: Worse social interaction skills are associated with higher AI use.  
+- **H4**: Higher social media exposure is associated with higher AI use.
+
