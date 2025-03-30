@@ -6,6 +6,7 @@ output: html_document
 ---
 
 This is a trial run of an upcoming data analysis project. Made-up data is being used.
+
 **Research Question**: Do people who use AI more come from higher parental income families, have lower academic scores, worse social skills, and use digital social media platforms more?
 
 ```{r setup, include=FALSE}
@@ -14,18 +15,21 @@ knitr::opts_chunk$set(echo = TRUE)
 library(readr)
 library(dplyr)
 library(moments)
+library(ggplot2)
+library(MASS)
 
 df <- read_csv('mock_data.csv')
 
-
 ```
 
-# Research Design
+#### Research Design
+
 **Data Collection**: Survey, Questionnaire.  
 **Population**: Young Chinese people (18-25)  
 **Sample Size**: Approximately 50 (convenience or self-selecting)
 
-# Variables
+#### Variables
+
 - **Dependent variable**: AI use (frequency of use)  
 - **Independent variables**:
   1. Academic performance (self-reported grades)  
@@ -33,13 +37,16 @@ df <- read_csv('mock_data.csv')
   3. Social interaction skills (composite score from multiple Likert scale questions)  
   4. Social media exposure (frequency or duration of social media use)
 
-# Hypotheses
+#### Hypotheses
+
 - **H1**: Lower academic performance is associated with higher AI use.  
 - **H2**: Higher parental income is associated with higher AI use.  
 - **H3**: Worse social interaction skills are associated with higher AI use.  
 - **H4**: Higher social media exposure is associated with higher AI use.
 
-# Ordering Data, Summary Statistics
+-------------------------------------------------------------------------------------------------------------
+
+## Ordering Data, Summary Statistics
 
 ```{r}
 
@@ -95,60 +102,201 @@ cat(names(sort(table(df$`Field of Study`), decreasing = TRUE))[1], "\n")
 
 ```
 
-# Hypothesis Testing
+## Hypothesis Testing
 
-## H1: Lower academic performance is associated with higher AI use
+#### H1: Lower academic performance is associated with higher AI use
 (Null Hypothesis: There is no association between academic performance and AI use.)
 
+**Exploring Distribution of Variables**
+
 ```{r}
+
+ggplot(df, aes(x = `AI Use (Frequency)`)) +
+  geom_bar(fill = "steelblue") +
+  labs(title = "Distribution of AI Use Frequency", x = "AI Use (Frequency)", y = "Count") +
+  theme_minimal()
+
+ggplot(df, aes(x = `Academic Performance (Grade)`)) +
+  geom_bar(fill = "darkred") +
+  labs(title = "Distribution of Academic Performance", x = "Grade", y = "Count") +
+  theme_minimal()
 
 
 ```
 
-Spearman or Kendall
+**Correlaton tests, ordinal regression**
+
+```{r}
+
+df$AI_Use_Numeric <- as.numeric(factor(df$`AI Use (Frequency)`, 
+                                       levels = c("Never", "Rarely", "Sometimes", "Often", "Always")))
+
+df$Academic_Performance_Numeric <- as.numeric(factor(df$`Academic Performance (Grade)`, 
+                                                     levels = c("F", "D", "C", "B", "A")))
+
+
+cor_test_H1 <- cor.test(df$AI_Use_Numeric, df$Academic_Performance_Numeric, method = "spearman")
+print(cor_test_H1) 
+
+kendall_test <- cor.test(df$AI_Use_Numeric, df$Academic_Performance_Numeric, method = "kendall")
+print(kendall_test)
+
+df$AI_Use_Ordinal <- factor(df$`AI Use (Frequency)`, 
+                            levels = c("Never", "Rarely", "Sometimes", "Often", "Always"),
+                            ordered = TRUE)
+
+model <- polr(AI_Use_Ordinal ~ Academic_Performance_Numeric, data = df, Hess = TRUE)
+summary(model)
+
+exp(cbind(OR = coef(model), confint(model)))
+
+```
+**Test Results**
+
+Spearman's rank-order correlation was conducted to assess the relationship between AI use frequency and academic performance. The results indicate a weak positive correlation, rs(48) = 0.16, p = 0.259. Since the p-value exceeds 0.05, the correlation is not statistically significant.
+
+Given the presence of tied ranks and the relatively small sample size, Kendall's Tau was also performed. The
+Kendall's rank-order correlation results also indicate a weak positive correlation, τ(48) = 0.13, z = 1.13, p = 0.26. Since the p-value exceeds 0.05, the correlation is not statistically significant.
+
+An ordinal logistic regression was conducted to assess the relationship between academic performance and AI use frequency. The results indicate that academic performance does not significantly predict AI use frequency, β = 0.233, SE = 0.199, t = 1.171. The odds ratio suggests that a one-unit increase in academic performance increases the odds of more frequent AI use by 26% (OR = 1.26, 95% CI: 0.86 – 1.87), but the confidence interval includes 1, indicating no statistically significant effect. The Often | Always threshold was the only transition with a significant effect (t = 3.06), suggesting a notable increase in AI use at this stage.
+
+**Conclusion:** There is no strong evidence to support H1. The results from correlation and regression analyses indicate that academic performance is not significantly associated with AI use frequency.
 
 ## H2: Higher parental income is associated with higher AI use.
 (Null Hypothesis: There is no association between parental income and AI use.)
 
+**Exploring Distribution of Variables**
+
 ```{r}
+
+ggplot(df, aes(x = `Parental Income (Range)`)) +
+  geom_bar(fill = "darkgreen") +
+  labs(title = "Distribution of Parental Income", x = "Parental Income", y = "Count") +
+  theme_minimal()
+
+```
+
+**Correlation Tests and Regression**
+
+```{r}
+
+cor_test_H1 <- cor.test(df$AI_Use_Numeric, df$Academic_Performance_Numeric, method = "spearman")
+print(cor_test_H1)
+
+kendall_test <- cor.test(df$AI_Use_Numeric, df$Academic_Performance_Numeric, method = "kendall")
+print(kendall_test)
+
+model <- polr(AI_Use_Ordinal ~ Academic_Performance_Numeric, data = df, Hess = TRUE)
+summary(model)
+
+exp(cbind(OR = coef(model), confint(model)))
 
 
 ```
 
-Spearman, Kendall
+**Test Results**
+
+Spearman’s rank-order correlation was conducted to assess the relationship between AI use frequency and academic performance. The results indicate a weak positive correlation, rs(48) = 0.16, p = 0.259. Since the p-value exceeds 0.05, the correlation is not statistically significant.
+
+Given the presence of tied ranks, Kendall’s Tau was also computed. The results indicate a weak positive correlation, τ(48) = 0.13, p = 0.26. The p-value exceeds 0.05, so the correlation is not statistically significant.
+
+An ordinal logistic regression was conducted to assess the relationship between academic performance and AI use frequency. The regression model suggests that academic performance does not significantly predict AI use frequency, β = 0.233, SE = 0.199, t = 1.171. The odds ratio indicates that a one-unit increase in academic performance increases the odds of more frequent AI use by 26% (OR = 1.26, 95% CI: 0.86 – 1.87), but the confidence interval includes 1, meaning this result is not statistically significant. The Often | Always threshold was the only one with a significant effect (t = 3.06), indicating a notable jump in AI use frequency at this point.
+
+**Conclusion:** There is no strong evidence to support H2. The results from correlation and regression analyses indicate that parental income is not significantly associated with AI use frequency.
 
 ## H3: Worse social interaction skills are associated with higher AI use.
 (Null Hypothesis: There is no association between social interaction skills and AI use.)
 
+**Exploring Distribution of Variables**
+
 ```{r}
 
-boxplot(df$`Social Interaction Skills (Score)` ~ df$`AI Use (Frequency)`, 
-        xlab = "AI Use Frequency", ylab = "Social Interaction Skills (Score)", 
-        main = "Boxplot of Social Interaction Skills by AI Use Frequency")
+df$Social_Interaction_Skills_Ordinal <- factor(df$`Social Interaction Skills (Score)`,
+                                               levels = 1:5,
+                                               ordered = TRUE)
 
-df$`AI Use (Frequency) Ranked` <- as.numeric(rank(df$`AI Use (Frequency)`))
-df$`Social Interaction Skills (Score) Ranked` <- as.numeric(rank(df$`Social Interaction Skills (Score)`))
-
-cor.test(df$`Social Interaction Skills (Score) Ranked`, df$`AI Use (Frequency) Ranked`, method = "spearman")
-
-cor.test(df$`Social Interaction Skills (Score) Ranked`, df$`AI Use (Frequency) Ranked`, method = "kendall")
-
+ggplot(df, aes(x = `Social Interaction Skills (Score)`)) +
+  geom_bar(fill = "skyblue") +
+  labs(title = "Distribution of Social Interaction Skills", 
+       x = "Social Interaction Skills (Score)", 
+       y = "Count") +
+  theme_minimal()
 
 ```
 
+**Correlaton tests, ordinal regression**
 
+```{r}
 
+df$Social_Interaction_Skills_Ordinal_Numeric <- as.numeric(df$Social_Interaction_Skills_Ordinal)
+
+spearman_test <- cor.test(df$AI_Use_Numeric, df$Social_Interaction_Skills_Ordinal_Numeric, method = "spearman")
+print(spearman_test)
+
+kendall_test <- cor.test(df$AI_Use_Numeric, df$Social_Interaction_Skills_Ordinal_Numeric, method = "kendall")
+print(kendall_test)
+
+model <- polr(Social_Interaction_Skills_Ordinal ~ AI_Use_Numeric, data = df, Hess = TRUE)
+summary(model)
+
+exp(cbind(OR = coef(model), confint(model)))
+
+```
+
+**Test Results**
+
+Spearman’s rank-order correlation was conducted to assess the relationship between AI use frequency and social interaction skills. The results indicate a very weak negative correlation, rs(48) = -0.04, p = 0.7769. Since the p-value exceeds 0.05, the correlation is not statistically significant.
+
+Given the presence of tied ranks, Kendall’s Tau was also computed. The results indicate a very weak negative correlation, τ(48) = -0.03, p = 0.7837. The p-value exceeds 0.05, so the correlation is not statistically significant.
+
+An ordinal logistic regression was conducted to assess the relationship between social interaction skills and AI use frequency. The regression model suggests that AI use does not significantly predict social interaction skills, β = -0.0621, SE = 0.1959, t = -0.3171. The odds ratio indicates that a one-unit increase in AI use decreases the odds of higher social interaction skills by 6% (OR = 0.94, 95% CI: 0.64 – 1.38), but the confidence interval includes 1, meaning this result is not statistically significant.
+
+**Conclusion:** There is no strong evidence to support H3. The results from correlation and regression analyses indicate that social interaction skills are not significantly associated with AI use frequency.
 
 ## H4: Higher social media exposure is associated with higher AI use.
 (Null Hypothesis: There is no association between social media exposure and AI use.)
 
-
-
+**Exploring Distribution of Variables**
 
 ```{r}
+
+ggplot(df, aes(x = `Social Media Exposure (Hours/day)`)) +
+  geom_histogram(fill = "blue", bins = 10) +
+  labs(title = "Distribution of Social Media Exposure", 
+       x = "Social Media Exposure (Hours/day)", 
+       y = "Count") +
+  theme_minimal()
 
 
 ```
 
+**Correlaton tests, ordinal regression**
 
+```{r}
 
+spearman_test <- cor.test(df$AI_Use_Numeric, df$`Social Media Exposure (Hours/day)`, method = "spearman")
+print(spearman_test)
+
+kendall_test <- cor.test(df$AI_Use_Numeric, df$`Social Media Exposure (Hours/day)`, method = "kendall")
+print(kendall_test)
+
+model <- polr(AI_Use_Ordinal ~ `Social Media Exposure (Hours/day)`, data = df, Hess = TRUE)
+summary(model)
+
+exp(cbind(OR = coef(model), confint(model)))
+
+```
+
+**Test Results**
+
+Spearman’s rank-order correlation was conducted to assess the relationship between AI use frequency and social media exposure. The results indicate a weak negative correlation, ρ(48) = -0.15, p = 0.292. Since the p-value exceeds 0.05, the correlation is not statistically significant.
+
+Kendall’s Tau was also computed due to ties in the data. The results indicate a weak negative correlation, τ(48) = -0.13, p = 0.267. The p-value exceeds 0.05, so the correlation is not statistically significant.
+
+An ordinal logistic regression was conducted to assess the relationship between social media exposure and AI use frequency. The regression model suggests that social media exposure does not significantly predict AI use frequency, β = -0.206, SE = 0.179, t = -1.15. The odds ratio indicates that a one-unit increase in social media exposure decreases the odds of more frequent AI use by 18% (OR = 0.814, 95% CI: 0.57 – 1.15), but the confidence interval includes 1, meaning this result is not statistically significant. The "Often | Always" threshold showed the strongest effect but did not reach statistical significance.
+
+**Conclusion:** There is no strong evidence to support H4. The results from correlation and regression analyses indicate that social media exposure is not significantly associated with AI use frequency.
+
+### Final Conclusion
+
+The analyses of all four hypotheses indicate that there is no significant association between parental income, social interaction skills, social media exposure, and AI use frequency. The results from both correlation and regression tests fail to provide strong evidence to support any of the proposed relationships.
