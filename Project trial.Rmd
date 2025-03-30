@@ -11,12 +11,19 @@ This is a trial run of an upcoming data analysis project. Made-up data is being 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
+library(readr)
+library(dplyr)
+library(moments)
+
+df <- read_csv('mock_data.csv')
+
+
 ```
 
 # Research Design
-Survey, Questionnaire.  
-Population: Young Chinese people (18-25)  
-Sample Size: Approximately 50 (convenience or self-selecting)
+**Data Collection**: Survey, Questionnaire.  
+**Population**: Young Chinese people (18-25)  
+**Sample Size**: Approximately 50 (convenience or self-selecting)
 
 # Variables
 - **Dependent variable**: AI use (frequency of use)  
@@ -31,4 +38,117 @@ Sample Size: Approximately 50 (convenience or self-selecting)
 - **H2**: Higher parental income is associated with higher AI use.  
 - **H3**: Worse social interaction skills are associated with higher AI use.  
 - **H4**: Higher social media exposure is associated with higher AI use.
+
+# Ordering Data, Summary Statistics
+
+```{r}
+
+df <- df %>%
+  mutate(
+    `AI Use (Frequency)` = factor(`AI Use (Frequency)`, levels = c("Never", "Rarely", "Sometimes", "Often", "Always")),
+    `Academic Performance (Grade)` = factor(`Academic Performance (Grade)`, levels = c("F", "D", "C", "B", "A")),
+    `Parental Income (Range)` = factor(`Parental Income (Range)`, 
+                                       levels = c("< ¥3,000", "¥3,000 - ¥5,000", "¥5,001 - ¥8,000", "¥8,001 - ¥12,000", "> ¥12,000"),
+                                       ordered = TRUE),
+    `Field of Study` = factor(`Field of Study`)
+  )
+
+cat("\n=== Summary of Dataset ===\n")
+summary(df)
+
+cat("\n=== AI Use (Frequency) ===\n")
+print(table(df$`AI Use (Frequency)`))
+print(prop.table(table(df$`AI Use (Frequency)`)))
+
+cat("\n=== AI Use (Purpose) ===\n")
+print(prop.table(table(df$`AI Use (Purpose)`)))
+cat("Most Common Purpose: ", names(sort(table(df$`AI Use (Purpose)`), decreasing = TRUE))[1], "\n")
+
+cat("\n=== Academic Performance (Grade) ===\n")
+print(prop.table(table(df$`Academic Performance (Grade)`)))
+
+cat("\n=== Parental Income (Range) ===\n")
+print(prop.table(table(df$`Parental Income (Range)`)))
+
+cat("\n=== Social Interaction Skills (Score) ===\n")
+print(c(
+  Mean = mean(df$`Social Interaction Skills (Score)`),
+  SD = sd(df$`Social Interaction Skills (Score)`),
+  Median = median(df$`Social Interaction Skills (Score)`),
+  IQR = IQR(df$`Social Interaction Skills (Score)`),
+  Skewness = skewness(df$`Social Interaction Skills (Score)`),
+  Kurtosis = kurtosis(df$`Social Interaction Skills (Score)`)
+))
+
+cat("\n=== Social Media Exposure (Hours/day) ===\n")
+print(c(
+  Mean = mean(df$`Social Media Exposure (Hours/day)`),
+  SD = sd(df$`Social Media Exposure (Hours/day)`),
+  Median = median(df$`Social Media Exposure (Hours/day)`),
+  IQR = IQR(df$`Social Media Exposure (Hours/day)`),
+  Skewness = skewness(df$`Social Media Exposure (Hours/day)`),
+  Kurtosis = kurtosis(df$`Social Media Exposure (Hours/day)`)
+))
+
+cat("\n=== Most Common Field of Study ===\n")
+cat(names(sort(table(df$`Field of Study`), decreasing = TRUE))[1], "\n")
+
+```
+
+# Hypothesis Testing
+
+## H1: Lower academic performance is associated with higher AI use
+(Null Hypothesis: There is no association between academic performance and AI use.)
+
+```{r}
+
+
+```
+
+Spearman or Kendall
+
+## H2: Higher parental income is associated with higher AI use.
+(Null Hypothesis: There is no association between parental income and AI use.)
+
+```{r}
+
+
+```
+
+Spearman, Kendall
+
+## H3: Worse social interaction skills are associated with higher AI use.
+(Null Hypothesis: There is no association between social interaction skills and AI use.)
+
+```{r}
+
+boxplot(df$`Social Interaction Skills (Score)` ~ df$`AI Use (Frequency)`, 
+        xlab = "AI Use Frequency", ylab = "Social Interaction Skills (Score)", 
+        main = "Boxplot of Social Interaction Skills by AI Use Frequency")
+
+df$`AI Use (Frequency) Ranked` <- as.numeric(rank(df$`AI Use (Frequency)`))
+df$`Social Interaction Skills (Score) Ranked` <- as.numeric(rank(df$`Social Interaction Skills (Score)`))
+
+cor.test(df$`Social Interaction Skills (Score) Ranked`, df$`AI Use (Frequency) Ranked`, method = "spearman")
+
+cor.test(df$`Social Interaction Skills (Score) Ranked`, df$`AI Use (Frequency) Ranked`, method = "kendall")
+
+
+```
+
+
+
+
+## H4: Higher social media exposure is associated with higher AI use.
+(Null Hypothesis: There is no association between social media exposure and AI use.)
+
+
+
+
+```{r}
+
+
+```
+
+
 
